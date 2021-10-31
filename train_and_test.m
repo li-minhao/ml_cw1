@@ -1,4 +1,4 @@
-function [acc, pre, re] = train_and_test(X, Y, testRatio, method)
+function [acc, pre, re] = train_and_test(X, Y, testRatio, method, epsilon)
     trainIndices = crossvalind('HoldOut', size(X, 1), testRatio);
     testIndices = ~trainIndices;
 
@@ -10,9 +10,9 @@ function [acc, pre, re] = train_and_test(X, Y, testRatio, method)
     
     % train model
     if method == "classification"
-        Mdl= fitcsvm(train_X,train_Y,"KernelFunction","linear","BoxConstraint",1);
+        Mdl = fitcsvm(train_X, train_Y, "KernelFunction", "linear", "BoxConstraint", 1);
     elseif method == "regression"
-%         Mdl = 
+        Mdl = fitrsvm(train_X, train_Y, "Epsilon", epsilon);
     end
 
     % predict the label for test set

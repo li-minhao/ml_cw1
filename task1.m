@@ -10,5 +10,11 @@ Y = double(categorical(table2cell(Y)));
 X = X(51:150,:);
 Y = Y(51:150,:);
 
-%% train model and test
-[acc, pre, re] = train_and_test(X, Y, 0.3, "classification");
+%% train classification model and test
+testRatio = 0.3;
+[acc, pre, re] = train_and_test(X, Y, testRatio, "classification");
+
+%% train regression model and test
+testRatio = 0.3;
+epsilon = 0.3;
+[acc, pre, re] = train_and_test(X, Y, testRatio, "regression", epsilon);
