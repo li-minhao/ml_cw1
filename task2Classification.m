@@ -14,9 +14,9 @@ sigma = linspace(1,5,5);
 q = linspace(1,5,5);
 
 % RBF kernal
-RBFNestCrossValidation(D, 10, 5, C, sigma)
+%RBFNestCrossValidation(D, 10, 5, C, sigma)
 
 % Polynomial kernal
-%PolyKerNestCrossValidation(D, 10, 5, C, q)
+PolyKerNestCrossValidation(D, 10, 5, C, q)
 
 

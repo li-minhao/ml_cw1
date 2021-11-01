@@ -58,7 +58,7 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
                 end
                 % find the mean accuracy of k results
                 k_inner_acc = mean(inner_acc);
-                fprintf('innerCV: C:%.3f, sigma:%.3f, svNum:%d(%.3f%%), ValAcc:%.6f, best_acc_sofar:%.3f\n',BoxConstraint,KernelScale,sum(svInd),sum(svInd)/length(X_train)*100,k_inner_acc,best_acc)
+                fprintf('innerCV: C:%.3f, sigma:%.3f, svNum:%d(%.3f%%), ValAcc:%.6f, best_acc_sofar:%.6f\n',BoxConstraint,KernelScale,sum(svInd),sum(svInd)/length(X_train)*100,k_inner_acc,best_acc)
                 if k_inner_acc > best_acc
                     %find the best accuracy and the hyperparameter
                     best_acc = k_inner_acc;
@@ -90,16 +90,16 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
         sv_per = sv_num/length(X_train)*100;
         support_vec_num = [support_vec_num, sv_num];
         support_vec_percentage = [support_vec_percentage, sv_per];
-        fprintf('\nouterCV:outerFold:%d, C:%.3f, sigma:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, valAcc:%.3f\n\n',i,C_best,sigma_best,sum(svInd),sum(svInd)/length(X_train)*100,best_acc,clf_acc)
+        fprintf('\nouterCV:outerFold:%d, C:%.3f, sigma:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, testAcc:%.3f\n\n',i,C_best,sigma_best,sum(svInd),sum(svInd)/length(X_train)*100,best_acc,clf_acc)
     end
     % report the result
     fprintf('best_C\n')
     disp(best_C)
     fprintf('best_sigma\n')
     disp(best_sigma)
-    fprintf('correspond_inacc\n')
+    fprintf('correspond_valacc\n')
     disp(correspond_inacc)
-    fprintf('correspond_outacc\n')
+    fprintf('correspond_testacc\n')
     disp(correspond_outacc)
     fprintf('support_vec_num\n')
     disp(support_vec_num)
