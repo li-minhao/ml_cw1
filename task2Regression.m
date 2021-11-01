@@ -3,8 +3,10 @@ wine_red = table2array(readtable('winequality-red.csv'));
 wine_white = table2array(readtable('winequality-white.csv'));
 wine = [wine_red;wine_white];
 
-epsilon = linspace(1,2,20);
-
+C = linspace(0.5,1,5);
+sigma = linspace(1,5,5);
+q = linspace(1,5,5);
+epsilon = linspace(0,2,5);
 
 % RBF kernal
 [best_epsilon, inRMSE, outRMSE] = RegressionCrossValidation(wine, 10, 5, epsilon);

@@ -18,7 +18,7 @@ function [best_Epsilon, inRMSE, outRMSE] = RegressionCrossValidation(D, k1, k2, 
         D_in = D;
         D_in(randidx_out(idxHead:idxTail),:) = [];
         % Initialise the accracy
-        best_RMSE = 0;
+        best_RMSE = inf;
         inner_RMSE = [];
         % Searching the hyperparameter Epsilon
         for m = 1:length(epsilon)
@@ -43,9 +43,9 @@ function [best_Epsilon, inRMSE, outRMSE] = RegressionCrossValidation(D, k1, k2, 
                 clf_RMSE = rmse(X_pdt,y_val);
                 inner_RMSE = [inner_RMSE,clf_RMSE];
             end
-            % find the mean accuracy of k results
+            % find the mean RMSE of k results
             k_inner_RMSE = mean(inner_RMSE);
-            if k_inner_RMSE > best_RMSE
+            if k_inner_RMSE < best_RMSE
                 %find the best accuracy and the hyperparameter
                 best_RMSE = k_inner_RMSE;
                 Epsilon_best = Epsilon;
