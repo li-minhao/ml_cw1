@@ -1,8 +1,8 @@
-function RBFNestCrossValidation(D, k1, k2, C, sigma)
+function PolyKerNestCrossValidation(D, k1, k2, C, q)
 % function RBFNestCrossValidation
-% SVM using Gaussian RBF kernel 
+% SVM using Polynomial kernel 
 % input dataset D, outer k1 fold, inner k2 fold, box constraint C
-% and kernel scale sigma
+% and Polynomial order q
 % report the best hyperparameter chosen and its correspond accuracy
 
     outSplitNum = round(size(D,1)/k1); %calculate the number of sample splitted by outer KFold
@@ -10,7 +10,7 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
     randidx_out = randperm(size(D,1)); %generate random index to shuffle the data
     randidx_in = randperm((size(D,1)-outSplitNum));
     best_C = [];
-    best_sigma = [];
+    best_q = [];
     correspond_inacc = [];
     correspond_outacc = [];
     for i = 1:k1
@@ -26,9 +26,9 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
         inner_acc = [];
         for m = 1:length(C)
             % Searching the hyperparameter C
-            for n = 1:length(sigma)
-            % Searching the hyperparameter sigma 
-                KernelScale = sigma(n);
+            for n = 1:length(q)
+            % Searching the hyperparameter q 
+                PolynomialOrder = q(n);
                 BoxConstraint = C(m);
                 for j = 1:k2
                 % The inner cross validation
@@ -44,7 +44,7 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
                     X_val = D_val(:,1:size(D_train,2)-1);
                     y_val = D_val(:,size(D_train,2));
                     % Fit the model
-                    M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint,'KernelScale',KernelScale);
+                    M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder);
                     % Make predictions on validation set
                     X_pdt = predict(M, X_val);
                     % Calculate accuracy
@@ -57,14 +57,14 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
                     %find the best accuracy and the hyperparameter
                     best_acc = k_inner_acc;
                     C_best = BoxConstraint;
-                    sigma_best = KernelScale;
+                    q_best = PolynomialOrder;
                 end
             end
         end
         % append the best hyperparameter searched in inner cv
         correspond_inacc = [correspond_inacc, best_acc];
         best_C = [best_C, C_best];
-        best_sigma = [best_sigma, sigma_best];
+        best_q = [best_q, q_best];
         % use the best hyperparameter to have outer cv
         % Extract features X and labels y
         X_train = D_in(:,1:size(D_train,2)-1);
@@ -72,7 +72,7 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
         X_val = D_out(:,1:size(D_train,2)-1);
         y_val = D_out(:,size(D_train,2));
         % Fit the model
-        M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',C_best,'KernelScale',sigma_best);
+        M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',C_best,'PolynomialOrder',PolynomialOrder);
         % Make predictions on test set
         X_pdt = predict(M, X_val);
         % Calculate accuracy
@@ -82,8 +82,8 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
     % report the result
     fprintf('best_C\n')
     disp(best_C)
-    fprintf('best_sigma\n')
-    disp(best_sigma)
+    fprintf('best_q\n')
+    disp(best_q)
     fprintf('correspond_inacc\n')
     disp(correspond_inacc)
     fprintf('correspond_outacc\n')
