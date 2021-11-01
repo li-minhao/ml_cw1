@@ -13,6 +13,8 @@ function PolyKerNestCrossValidation(D, k1, k2, C, q)
     best_q = [];
     correspond_inacc = [];
     correspond_outacc = [];
+    support_vec_num = [];
+    support_vec_percentage = [];
     for i = 1:k1
     % The outer cross validation
         % Randomly split the data
@@ -24,6 +26,7 @@ function PolyKerNestCrossValidation(D, k1, k2, C, q)
         % Initialise the accracy
         best_acc = 0;
         inner_acc = [];
+        fprintf('Fold %d:\n',i)
         for m = 1:length(C)
             % Searching the hyperparameter C
             for n = 1:length(q)
@@ -45,6 +48,7 @@ function PolyKerNestCrossValidation(D, k1, k2, C, q)
                     y_val = D_val(:,size(D_train,2));
                     % Fit the model
                     M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder);
+                    svInd = M.IsSupportVector;
                     % Make predictions on validation set
                     X_pdt = predict(M, X_val);
                     % Calculate accuracy
@@ -53,6 +57,7 @@ function PolyKerNestCrossValidation(D, k1, k2, C, q)
                 end
                 % find the mean accuracy of k results
                 k_inner_acc = mean(inner_acc);
+                fprintf('innerCV: C:%.3f, q:%.3f, svNum:%d(%.3f%%), ValAcc:%.6f, best_acc_sofar:%.6f\n',BoxConstraint,PolynomialOrder,sum(svInd),sum(svInd)/length(X_train)*100,k_inner_acc,best_acc)
                 if k_inner_acc > best_acc
                     %find the best accuracy and the hyperparameter
                     best_acc = k_inner_acc;
@@ -73,19 +78,29 @@ function PolyKerNestCrossValidation(D, k1, k2, C, q)
         y_val = D_out(:,size(D_train,2));
         % Fit the model
         M = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',C_best,'PolynomialOrder',PolynomialOrder);
+        svInd = M.IsSupportVector;
         % Make predictions on test set
         X_pdt = predict(M, X_val);
         % Calculate accuracy
         clf_acc = accuracy(X_pdt,y_val);
         correspond_outacc = [correspond_outacc,clf_acc];
+        sv_num = sum(svInd);
+        sv_per = sv_num/length(X_train)*100;
+        support_vec_num = [support_vec_num, sv_num];
+        support_vec_percentage = [support_vec_percentage, sv_per];
+        fprintf('\nouterCV:outerFold:%d, C:%.3f, q:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, testAcc:%.3f\n\n',i,C_best,q_best,sum(svInd),sum(svInd)/length(X_train)*100,best_acc,clf_acc)
     end
     % report the result
     fprintf('best_C\n')
     disp(best_C)
     fprintf('best_q\n')
     disp(best_q)
-    fprintf('correspond_inacc\n')
+    fprintf('correspond_valacc\n')
     disp(correspond_inacc)
-    fprintf('correspond_outacc\n')
+    fprintf('correspond_testacc\n')
     disp(correspond_outacc)
+    fprintf('support_vec_num\n')
+    disp(support_vec_num)
+    fprintf('support_vec_percentage\n')
+    disp(support_vec_percentage)
 end

@@ -8,14 +8,13 @@ idx = ~strcmp(Y,'Iris-setosa');
 X = X(idx,:);
 Y = strcmp(Y(idx,:),'Iris-versicolor');
 D = [X,Y];
-C = linspace(0.5,2,20);
-sigma = linspace(1,5,20);
+C = linspace(0.5,1,5);
+sigma = linspace(1,5,5);
 q = linspace(1,5,5);
 
 % RBF kernal
-RBFNestCrossValidation(D, 10, 5, C, sigma)
+% RBFNestCrossValidation(D, 10, 5, C, sigma)
 
 % Polynomial kernal
 PolyKerNestCrossValidation(D, 10, 5, C, q)
-
 
