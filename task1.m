@@ -12,9 +12,9 @@ Y = Y(51:150,:);
 
 %% train classification model and test
 testRatio = 0.3;
-[acc, pre, re] = train_and_test(X, Y, testRatio, "classification");
+[acc, pre, re] = classificationTrainTest(X, Y, testRatio);
 
 %% train regression model and test
 testRatio = 0.3;
 epsilon = 0.3;
-[acc, pre, re] = train_and_test(X, Y, testRatio, "regression", epsilon);
+RMSE = regressionTrainTest(X, Y, testRatio, epsilon);
