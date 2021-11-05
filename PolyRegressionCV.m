@@ -80,7 +80,7 @@ function PolyRegressionCV(D, k1, k2, C, q, epsilon)
         X_val = D_out(:,1:size(D_train,2)-1);
         y_val = D_out(:,size(D_train,2));
         % Fit the model
-        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder,'Epsilon',Epsilon_best);
+        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',C_best,'PolynomialOrder',q_best,'Epsilon',Epsilon_best);
         % Make predictions on test set
         X_pdt = predict(M, X_val);
         % Calculate accuracy

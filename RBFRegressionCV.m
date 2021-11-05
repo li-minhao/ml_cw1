@@ -80,7 +80,7 @@ function RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
         X_val = D_out(:,1:size(D_train,2)-1);
         y_val = D_out(:,size(D_train,2));
         % Fit the model
-        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint,'KernelScale',KernelScale,'Epsilon',Epsilon_best);
+        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',C_best,'KernelScale',sigma_best,'Epsilon',Epsilon_best);
         % Make predictions on test set
         X_pdt = predict(M, X_val);
         % Calculate accuracy
