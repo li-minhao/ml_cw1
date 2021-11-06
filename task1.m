@@ -58,3 +58,13 @@ plot(epsilon,RMSE)
 title('task1 regression')
 xlabel('epsilon')
 ylabel('RMSE')
+
+[sortRMSE, index] = sort(RMSE,'ascend');
+bestEpsilon = epsilon(index(1));
+
+fprintf("The best RMSE is: ")
+disp(sortRMSE(1))
+fprintf("That epsilon is: ")
+disp(bestEpsilon)
+
+
