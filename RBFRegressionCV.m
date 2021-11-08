@@ -27,12 +27,12 @@ function RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
         fprintf('Fold %d:\n',i)
         % Searching the hyperparameter C
         for m = 1:length(C)
+            BoxConstraint = C(m);
             % Searching the hyperparameter sigma
             for n = 1:length(sigma)
+                KernelScale = sigma(n);
                 % Searching the hyperparameter Epsilon
-                for p = 1:length(epsilon)
-                    BoxConstraint = C(m);
-                    KernelScale = sigma(n);
+                for p = 1:length(epsilon)                    
                     Epsilon = epsilon(p);
                     for j = 1:k2
                     % The inner cross validation
@@ -40,7 +40,8 @@ function RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
                         idxHead = (1+(j-1)*inSplitNum);
                         idxTail = min(size(D_in,1),j*inSplitNum);
                         D_val = D_in(randidx_in(idxHead:idxTail),:);
-                        D_train = setxor(D_in, D_val, 'row', 'stable');
+                        D_train = D_in;
+                        D_train(randidx_in(idxHead:idxTail),:) = [];
                         % Extract features X and labels y
                         X_train = D_train(:,1:size(D_train,2)-1);
                         y_train = D_train(:,size(D_train,2));
