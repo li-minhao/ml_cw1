@@ -39,7 +39,7 @@ wine = readtable("winequality-white.csv");
 
 % randomly pick 20% data becasuse this dataset has too much data
 len = size(wine,1);
-index = randperm(len,(len/5));
+index = randperm(len,round(len/5));
 wine = wine(index,:);
 
 X_wine = table2array(wine(:,1:11));
@@ -55,9 +55,9 @@ end
 
 
 %% train regression model and test
-epsilon =  linspace(0.1,1,30);
+epsilon =  linspace(0.1,1.5,20);
 RMSE = [];
-for i=1:30
+for i=1:20
     RMSE = [RMSE, regressionTrainTest(X_wine, Y_wine, k, epsilon(i))];
 end
 
