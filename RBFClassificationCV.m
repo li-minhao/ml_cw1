@@ -1,4 +1,4 @@
-function RBFNestCrossValidation(D, k1, k2, C, sigma)
+function [best_C, best_sigma, correspond_inacc, correspond_outacc, support_vec_num, support_vec_percentage] = RBFClassificationCV(D, k1, k2, C, sigma)
 % function RBFNestCrossValidation
 % SVM using Gaussian RBF kernel.
 % Input dataset D, outer k1 fold, inner k2 fold, box constraint C
@@ -92,17 +92,4 @@ function RBFNestCrossValidation(D, k1, k2, C, sigma)
         support_vec_percentage = [support_vec_percentage, sv_per];
         fprintf('\nouterCV:outerFold:%d, C:%.3f, sigma:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, testAcc:%.3f\n\n',i,C_best,sigma_best,sum(svInd),sum(svInd)/length(X_train)*100,best_acc,clf_acc)
     end
-    % report the result
-    fprintf('best_C\n')
-    disp(best_C)
-    fprintf('best_sigma\n')
-    disp(best_sigma)
-    fprintf('correspond_valacc\n')
-    disp(correspond_inacc)
-    fprintf('correspond_testacc\n')
-    disp(correspond_outacc)
-    fprintf('support_vec_num\n')
-    disp(support_vec_num)
-    fprintf('support_vec_percentage\n')
-    disp(support_vec_percentage)
 end
