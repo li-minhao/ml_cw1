@@ -1,7 +1,7 @@
 %% Regression task for task 2
 %% Data preparation
 wine = table2array(readtable('winequality-white.csv'));
-indices = randperm(round(size(wine,1)/2));
+indices = randperm(size(wine,1),round(size(wine,1)/50));
 wine = wine(indices,:);
 X = wine(:,1:end-1);
 y = wine(:,end);
@@ -12,9 +12,9 @@ if has_NaN
 end
 wine = [X,y];
 
-C = linspace(0.5,1,2);
-sigma = linspace(1,5,10);
-q = linspace(1,5,10);
+C = linspace(0.5,2,5);
+sigma = linspace(1,5,5);
+q = linspace(1,5,5);
 epsilon = linspace(0.1,1,5);
 k1 = 10;
 k2 = 5;
