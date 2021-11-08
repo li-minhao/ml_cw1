@@ -1,4 +1,4 @@
-function RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
+function [best_C, best_sigma, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_percentage] = RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
 % input dataset D, outer k1 fold, inner k2 fold, C, sigma, and Epsilon
 % report the best hyperparameter chosen and its correspond RMSE
 
@@ -89,21 +89,6 @@ function RBFRegressionCV(D, k1, k2, C, sigma, epsilon)
         outRMSE = [outRMSE,clf_RMSE];
         support_vec_num(end+1) = sum(svIdx);
         support_vec_percentage(end+1) = sum(svIdx)/length(X_train)*100;
-        fprintf('outerCV: outerFold:%d, C:%.3f, Sigma:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,sigma_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
+        fprintf('\nouterCV: outerFold:%d, C:%.3f, Sigma:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,sigma_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
     end
-    % report the result
-    fprintf('best_C\n')
-    disp(best_C)
-    fprintf('best_sigma\n')
-    disp(best_sigma)
-    fprintf('best_Epsilon\n');
-    disp(best_Epsilon);
-    fprintf('correspond_inRMSE\n');
-    disp(inRMSE);
-    fprintf('correspond_outRMSE\n');
-    disp(outRMSE);
-    fprintf('support_vec_num\n')
-    disp(support_vec_num)
-    fprintf('support_vec_percentage\n')
-    disp(support_vec_percentage)
 end
