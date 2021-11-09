@@ -26,13 +26,15 @@ end
 
 %% train classification model and test
 [acc, pre, re] = classificationTrainTest(X, Y, 10);
-fprintf("The accuracy of iris is: ")
-disp(acc)
-fprintf("The precision of iris is: ")
-disp(pre)
-fprintf("The recall of iris is: ")
-disp(re)
-
+f1 = 2*(pre*re)/(pre+re);
+fprintf("The accuracy of iris is: ");
+disp(acc);
+fprintf("The precision of iris is: ");
+disp(pre);
+fprintf("The recall of iris is: ");
+disp(re);
+fprintf("The f1 score of iris is: ");
+disp(f1);
 
 %% load wine data
 wine = readtable("winequality-white.csv");
