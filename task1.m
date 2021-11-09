@@ -56,22 +56,22 @@ end
 
 %% train regression model and test
 epsilon =  linspace(0.1,1.5,20);
-RMSE = [];
+RMSE = zeros(1, 20);
 for i=1:20
-    RMSE = [RMSE, regressionTrainTest(X_wine, Y_wine, k, epsilon(i))];
+    RMSE(i) = regressionTrainTest(X_wine, Y_wine, k, epsilon(i));
 end
 
-plot(epsilon,RMSE)
-title('task1 regression')
-xlabel('epsilon')
-ylabel('RMSE')
+plot(epsilon,RMSE);
+title('task1 regression');
+xlabel('epsilon');
+ylabel('RMSE');
 
 [sortRMSE, index] = sort(RMSE,'ascend');
 bestEpsilon = epsilon(index(1));
 
-fprintf("The best RMSE is: ")
-disp(sortRMSE(1))
-fprintf("That epsilon is: ")
-disp(bestEpsilon)
+fprintf("The best RMSE is: ");
+disp(sortRMSE(1));
+fprintf("That epsilon is: ");
+disp(bestEpsilon);
 
 
