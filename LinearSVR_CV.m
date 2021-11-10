@@ -3,7 +3,7 @@ function [best_C, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_pe
 % SVM using linear kernel 
 % input dataset (X,y), outer k1 fold, inner k2 fold, box constraint C
 % and margin tube epsilon
-% report the best hyperparameter chosen and its correspond accuracy
+% report the best hyperparameter chosen and its correspond rmse
 
     outSplitNum = floor(size(X,1)/k1); %calculate the number of sample splitted by outer KFold
     randidx_out = randperm(size(X,1)); %generate random index to shuffle the data

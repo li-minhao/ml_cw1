@@ -1,5 +1,5 @@
 function [best_C, best_q, correspond_inacc, correspond_outacc, support_vec_num, support_vec_percentage] = PolyClassificationCV(X, Y, k1, k2, C, q)
-% function RBFNestCrossValidation
+% function PolynomialNestCrossValidation
 % SVM using Polynomial kernel 
 % input dataset D, outer k1 fold, inner k2 fold, box constraint C
 % and Polynomial order q
