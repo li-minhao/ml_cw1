@@ -39,9 +39,12 @@ disp(f1);
 %% load wine data
 wine = readtable("winequality-white.csv");
 
-% randomly pick 20% data becasuse this dataset has too much data
+% randomly pick 5% data to accelerate computing
 len = size(wine,1);
-index = randperm(len,round(len/5));
+index = randperm(len,round(len/20));
+if 0    % Please do not modify this file when testing
+    save('WineIndices.mat', 'index')
+end
 wine = wine(index,:);
 
 X_wine = table2array(wine(:,1:11));
