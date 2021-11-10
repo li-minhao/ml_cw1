@@ -1,5 +1,7 @@
 close all;
 clear;
+addpath(genpath(".."));
+
 
 %% set k for k-fold cross validation
 k = 10;
@@ -25,16 +27,10 @@ end
  
 
 %% train classification model and test
-[acc, pre, re] = task1_classification(X, Y, 10);
-f1 = 2*(pre*re)/(pre+re);
+acc = linear_classification(X, Y, 10);
 fprintf("The accuracy of iris is: ");
 disp(acc);
-fprintf("The precision of iris is: ");
-disp(pre);
-fprintf("The recall of iris is: ");
-disp(re);
-fprintf("The f1 score of iris is: ");
-disp(f1);
+
 
 %% load wine data
 wine = readtable("winequality-white.csv");
@@ -66,7 +62,7 @@ end
 epsilon =  linspace(0.1,1.5,20);
 RMSE = zeros(1, 20);
 for i=1:20
-    RMSE(i) = task1_regression(X_wine, Y_wine, k, epsilon(i));
+    RMSE(i) = linear_regression(X_wine, Y_wine, k, epsilon(i));
 end
 
 plot(epsilon,RMSE);

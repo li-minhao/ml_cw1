@@ -1,4 +1,4 @@
-function avg_RMSE = task1_regression(X,Y,k,epsilon)
+function avg_RMSE = linear_regression(X,Y,k,epsilon)
     RMSE = zeros(1,k);
     for i=1:k
         [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));

@@ -1,5 +1,12 @@
 %% Regression task for task 2
+close all;
+clear;
+addpath(genpath("./dataset"));
+path_name = 'hyper_parameter/';
+
+
 %% Data preparation
+% load wine
 wine = table2array(readtable('winequality-white.csv'));
 load('WineIndices.mat');
 wine = wine(index,:);
@@ -11,6 +18,7 @@ if has_NaN
     fprintf("Wine quality dataset has missing value.\n\n");
 end
 
+% Initialize the hyperparameter
 C = linspace(0.5,1,5);
 sigma = linspace(1,5,5);
 q = linspace(1,3,3);
@@ -18,24 +26,27 @@ epsilon = linspace(0.1,1,5);
 k1 = 10;
 k2 = 5;
 
+
 %% Linear kernal training
 fprintf('Regression model using linear kernels in training...\n\n')
 [best_C_l, best_Epsilon_l, inRMSE_l, outRMSE_l, support_vec_num_l, support_vec_percentage_l] = LinearSVR_CV(X, y, k1, k2, C, epsilon);
 % save the best hyperparameters found in a file
-save('LinearSVR.mat','best_C_l','best_Epsilon_l')
+save([path_name,'linear_SVR.mat'],'best_C_l','best_Epsilon_l')
+
 
 %% RBF kernal training
 fprintf('Regression model using RBF kernels in training...\n\n')
 [best_C_r, best_sigma_r, best_Epsilon_r, inRMSE_r, outRMSE_r, support_vec_num_r, support_vec_percentage_r] = RBFRegressionCV(X, y, k1, k2, C, sigma, epsilon);
 % save the best hyperparameters found in a file
-save('RBFRegression.mat','best_C_r','best_sigma_r','best_Epsilon_r')
+save([path_name,'RBF_regression.mat'],'best_C_r','best_sigma_r','best_Epsilon_r')
 
 
 %% Polynomial kernal Training
 fprintf('Regression model using Polynomial kernels in training...\n\n')
 [best_C_p, best_q_p, best_Epsilon_p, inRMSE_p, outRMSE_p, support_vec_num_p, support_vec_percentage_p] = PolyRegressionCV(X, y, k1, k2, C, q, epsilon);
 % save the best hyperparameters found in a file
-save('PolyRegression.mat','best_C_p','best_q_p','best_Epsilon_p')
+save([path_name,'poly_regression.mat'],'best_C_p','best_q_p','best_Epsilon_p')
+
 
 %% Linear kernal report the result
 fprintf('=========== Linear kernal ============\n\n')
@@ -49,6 +60,7 @@ for i = 1:k1
 end
 fprintf('\nAverage test RMSE: %.6f\n', mean(outRMSE_l))
 fprintf('Average support vector: %.1f(%.1f%%)\n\n', mean(support_vec_num_l), mean(support_vec_percentage_l))
+
 
 %% RBF kernal report the result
 fprintf('=========== RBF kernal ============\n\n')
