@@ -11,6 +11,29 @@ X = X(idx,:);
 Y = strcmp(Y(idx,:),'Iris-versicolor');
 k = 10;
 
+%% Linear kernel:
+fprintf('=========== Linear kernal ============\n\n')
+load('LinearClassification.mat')
+acc = [];
+for i=1:k
+    fprintf('Fold-%d:',i);
+    [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));
+    % Use 10 optimse hyperparameters train model
+    X_pdt = zeros(size(testX,1),size(best_C_l,2));
+    % Train k1 models based on the k1 best hyperparameters
+    for j = 1:size(best_C_l,2)
+        BoxConstraint = best_C_l(j);
+        Mdl = fitcsvm(trainX,trainY,'Standardize',true,'KernelFunction','linear','BoxConstraint',BoxConstraint);
+        X_pdt(:,j) = predict(Mdl, testX);
+    end
+    % take the average of k1 models with the best hyperparameter
+    avg_predict = mean(X_pdt,2);
+    % Calculate performance
+    acc(i) = accuracy(avg_predict,testY);
+    fprintf('accuracy:%.3f\n',acc(i))
+end
+fprintf('%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
+
 
 %% RBF kernel:
 fprintf('=========== RBF kernal ============\n\n')

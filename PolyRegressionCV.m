@@ -1,11 +1,10 @@
-function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_percentage] = PolyRegressionCV(D, k1, k2, C, q, epsilon)
+function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_percentage] = PolyRegressionCV(X, Y, k1, k2, C, q, epsilon)
 % input dataset D, outer k1 fold, inner k2 fold, C, q, and Epsilon
 % report the best hyperparameter chosen and its correspond RMSE
 
-    outSplitNum = floor(size(D,1)/k1); %calculate the number of sample splitted by outer KFold
-    inSplitNum = floor((size(D,1)-outSplitNum)/k2);
-    randidx_out = randperm(size(D,1)); %generate random index to shuffle the data
-    randidx_in = randperm((size(D,1)-outSplitNum));
+    outSplitNum = floor(size(X,1)/k1); %calculate the number of sample splitted by outer KFold
+    randidx_out = randperm(size(X,1)); %generate random index to shuffle the data
+    randidx_in = randperm((size(X,1)-outSplitNum));
     best_C = [];
     best_q = [];
     best_Epsilon = [];
@@ -16,11 +15,7 @@ function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, suppor
     for i = 1:k1
     % The outer cross validation
         % Randomly split the data
-        idxHead = (1+(i-1)*outSplitNum);
-        idxTail = i*outSplitNum;
-        D_out = D(randidx_out(idxHead:idxTail),:);
-        D_in = D;
-        D_in(randidx_out(idxHead:idxTail),:) = [];
+        [OuttrainX,OuttrainY,OuttestX,OuttestY] = KFoldGroup(X,Y,k1,i,randidx_out);
         % Initialise the accracy
         best_RMSE = inf;
         inner_RMSE = [];
@@ -37,16 +32,7 @@ function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, suppor
                     for j = 1:k2
                     % The inner cross validation
                         % Split the data
-                        idxHead = (1+(j-1)*inSplitNum);
-                        idxTail = min(size(D_in,1),j*inSplitNum);
-                        D_val = D_in(randidx_in(idxHead:idxTail),:);
-                        D_train = D_in;
-                        D_train(randidx_in(idxHead:idxTail),:) = [];
-                        % Extract features X and labels y
-                        X_train = D_train(:,1:size(D_train,2)-1);
-                        y_train = D_train(:,size(D_train,2));
-                        X_val = D_val(:,1:size(D_train,2)-1);
-                        y_val = D_val(:,size(D_train,2));
+                        [X_train,y_train,X_val,y_val] = KFoldGroup(OuttrainX,OuttrainY,k2,j,randidx_in);
                         % Fit the model
                         M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder,'Epsilon',Epsilon);
                         svIdx = M.IsSupportVector;
@@ -75,17 +61,12 @@ function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, suppor
         best_q = [best_q, q_best];
         best_Epsilon = [best_Epsilon, Epsilon_best];
         % use the best hyperparameter to have outer cv
-        % Extract features X and labels y
-        X_train = D_in(:,1:size(D_train,2)-1);
-        y_train = D_in(:,size(D_train,2));
-        X_val = D_out(:,1:size(D_train,2)-1);
-        y_val = D_out(:,size(D_train,2));
         % Fit the model
-        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',C_best,'PolynomialOrder',q_best,'Epsilon',Epsilon_best);
+        M = fitrsvm(OuttrainX,OuttrainY,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',C_best,'PolynomialOrder',q_best,'Epsilon',Epsilon_best);
         % Make predictions on test set
-        X_pdt = predict(M, X_val);
+        X_pdt = predict(M, OuttestX);
         % Calculate accuracy
-        clf_RMSE = rmse(X_pdt,y_val);
+        clf_RMSE = rmse(X_pdt,OuttestY);
         outRMSE = [outRMSE,clf_RMSE];
         support_vec_num(end+1) = sum(svIdx);
         support_vec_percentage(end+1) = sum(svIdx)/length(X_train)*100;

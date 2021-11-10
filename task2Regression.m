@@ -10,7 +10,6 @@ y = wine(:,end);
 if has_NaN
     fprintf("Wine quality dataset has missing value.\n\n");
 end
-wine = [X,y];
 
 C = linspace(0.5,2,5);
 sigma = linspace(1,5,5);
@@ -22,14 +21,14 @@ k2 = 5;
 
 %% RBF kernal training
 fprintf('Regression model using RBF kernels in training...\n\n')
-[best_C_r, best_sigma_r, best_Epsilon_r, inRMSE_r, outRMSE_r, support_vec_num_r, support_vec_percentage_r] = RBFRegressionCV(wine, k1, k2, C, sigma, epsilon);
+[best_C_r, best_sigma_r, best_Epsilon_r, inRMSE_r, outRMSE_r, support_vec_num_r, support_vec_percentage_r] = RBFRegressionCV(X, y, k1, k2, C, sigma, epsilon);
 % save the best hyperparameters found in a file
 save('RBFRegression.mat','best_C_r','best_sigma_r','best_Epsilon_r')
 
 
 %% Polynomial kernal Training
 fprintf('Regression model using Polynomial kernels in training...\n\n')
-[best_C_p, best_q_p, best_Epsilon_p, inRMSE_p, outRMSE_p, support_vec_num_p, support_vec_percentage_p] = PolyRegressionCV(wine, k1, k2, C, q, epsilon);
+[best_C_p, best_q_p, best_Epsilon_p, inRMSE_p, outRMSE_p, support_vec_num_p, support_vec_percentage_p] = PolyRegressionCV(X, y, k1, k2, C, q, epsilon);
 % save the best hyperparameters found in a file
 save('PolyRegression.mat','best_C_p','best_q_p','best_Epsilon_p')
 

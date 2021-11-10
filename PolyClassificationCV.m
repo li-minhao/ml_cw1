@@ -5,7 +5,7 @@ function [best_C, best_q, correspond_inacc, correspond_outacc, support_vec_num, 
 % and Polynomial order q
 % report the best hyperparameter chosen and its correspond accuracy
 
-    outSplitNum = round(size(X,1)/k1); %calculate the number of sample splitted by outer KFold
+    outSplitNum = floor(size(X,1)/k1); %calculate the number of sample splitted by outer KFold
     randidx_out = randperm(size(X,1)); %generate random index to shuffle the data
     randidx_in = randperm((size(X,1)-outSplitNum));
     best_C = [];
