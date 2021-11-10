@@ -40,11 +40,14 @@ disp(f1);
 wine = readtable("winequality-white.csv");
 
 % randomly pick 5% data to accelerate computing
-len = size(wine,1);
-index = randperm(len,round(len/20));
-if 0    % Please do not modify this file when testing
-    save('WineIndices.mat', 'index')
-end
+% len = size(wine,1);
+% index = randperm(len,round(len/20));
+% if 0    % Please do not modify this file when testing
+%     save('WineIndices.mat', 'index')
+% end
+
+% make sure use the same dataset for both task1 and task2
+load('WineIndices.mat');
 wine = wine(index,:);
 
 X_wine = table2array(wine(:,1:11));
@@ -78,5 +81,10 @@ fprintf("The best RMSE is: ");
 disp(sortRMSE(1));
 fprintf("That epsilon is: ");
 disp(bestEpsilon);
+
+averageRMSE = mean(RMSE);
+fprintf("The average RMSE is: ");
+disp(averageRMSE);
+
 
 

@@ -1,8 +1,8 @@
 %% Regression task for task 2
 %% Data preparation
 wine = table2array(readtable('winequality-white.csv'));
-indices = load('WineIndices.mat');
-wine = wine(indices,:);
+load('WineIndices.mat');
+wine = wine(index,:);
 X = wine(:,1:end-1);
 y = wine(:,end);
 
