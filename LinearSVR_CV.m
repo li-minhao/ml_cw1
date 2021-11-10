@@ -1,0 +1,71 @@
+function [best_C, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_percentage] = LinearSVR_CV(X, Y, k1, k2, C, epsilon)
+% function Linear_kernel_NestCrossValidation
+% SVM using linear kernel 
+% input dataset (X,y), outer k1 fold, inner k2 fold, box constraint C
+% and margin tube epsilon
+% report the best hyperparameter chosen and its correspond accuracy
+
+    outSplitNum = floor(size(X,1)/k1); %calculate the number of sample splitted by outer KFold
+    randidx_out = randperm(size(X,1)); %generate random index to shuffle the data
+    randidx_in = randperm((size(X,1)-outSplitNum));
+    best_C = [];
+    best_Epsilon = [];
+    inRMSE = [];
+    outRMSE = [];
+    support_vec_num = [];
+    support_vec_percentage = [];
+    for i = 1:k1
+    % The outer cross validation
+        % Randomly split the data
+        [OuttrainX,OuttrainY,OuttestX,OuttestY] = KFoldGroup(X,Y,k1,i,randidx_out);
+        % Initialise the accracy
+        best_RMSE = inf;
+        inner_RMSE = [];
+        fprintf('Fold %d:\n',i)
+        % Searching the hyperparameter C
+        for m = 1:length(C)
+            BoxConstraint = C(m);
+                % Searching the hyperparameter Epsilon
+                for p = 1:length(epsilon)
+                    Epsilon = epsilon(p);
+                    for j = 1:k2
+                    % The inner cross validation
+                        % Split the data
+                        [X_train,y_train,X_val,y_val] = KFoldGroup(OuttrainX,OuttrainY,k2,j,randidx_in);
+                        % Fit the model
+                        M = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','linear','BoxConstraint',BoxConstraint,'Epsilon',Epsilon);
+                        svIdx = M.IsSupportVector;
+                        % Make predictions on validation set
+                        X_pdt = predict(M, X_val);
+                        % Calculate accuracy
+                        clf_RMSE = rmse(X_pdt,y_val);
+                        inner_RMSE = [inner_RMSE,clf_RMSE];
+                    end
+                    % find the mean RMSE of k results
+                    k_inner_RMSE = mean(inner_RMSE);
+                    fprintf('innerCV: C:%.3f, Epsilon:%.3f svNum:%d(%.3f%%), valRMSE:%.3f, best_RMSE:%.3f\n',BoxConstraint,Epsilon,sum(svIdx),sum(svIdx)/length(X_train)*100,k_inner_RMSE,best_RMSE)
+                    if k_inner_RMSE < best_RMSE
+                        %find the best accuracy and the hyperparameter
+                        best_RMSE = k_inner_RMSE;
+                        C_best = BoxConstraint;
+                        Epsilon_best = Epsilon;
+                    end
+                end
+        end
+        % append the best hyperparameter searched in inner cv
+        inRMSE = [inRMSE, best_RMSE];
+        best_C = [best_C, C_best];
+        best_Epsilon = [best_Epsilon, Epsilon_best];
+        % use the best hyperparameter to have outer cv
+        % Fit the model
+        M = fitrsvm(OuttrainX,OuttrainY,'Standardize',true,'KernelFunction','linear','BoxConstraint',C_best,'Epsilon',Epsilon_best);
+        % Make predictions on test set
+        X_pdt = predict(M, OuttestX);
+        % Calculate accuracy
+        clf_RMSE = rmse(X_pdt,OuttestY);
+        outRMSE = [outRMSE,clf_RMSE];
+        support_vec_num(end+1) = sum(svIdx);
+        support_vec_percentage(end+1) = sum(svIdx)/length(X_train)*100;
+        fprintf('\nouterCV: outerFold:%d, C:%.3f, Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
+    end
+end

@@ -14,17 +14,29 @@ k = 10;
 
 
 %% Linear:
-fprintf('=========== Linear ============\n')
+fprintf('=========== Linear kernal ============\n')
+load('LinearSVR.mat')
 RMSE_l = [];
 for i=1:k
     fprintf('Fold %d: ',i);
     [trainX,trainY,testX,testY] = KFoldGroup(X,y,k,i,randperm(size(X,1)));
-    Mdl = fitrsvm(trainX, trainY,'Standardize',true);
-    x_pdt = predict(Mdl, testX);
-    RMSE_l(i) = rmse(x_pdt,testY);
+    % Use 10 optimse hyperparameters train model
+    X_pdt = zeros(size(testX,1),size(best_C_l,2));
+    % Train k models based on the k best hyperparameters
+    for j = 1:size(best_C_l,2)
+        BoxConstraint_l = best_C_l(j);
+        Epsilon_l = best_Epsilon_l(j);
+        Mdl = fitrsvm(trainX,trainY,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint_l,'Epsilon',Epsilon_l);
+        X_pdt(:,j) = predict(Mdl, testX);
+    end
+    % take the average of k1 models with the best hyperparameter
+    avg_predict = mean(X_pdt,2);
+    % Calculate performance
+    RMSE_l(i) = rmse(avg_predict,testY);
     fprintf('RMSE: %.3f\n',RMSE_l(i))
 end
 fprintf('%d-Fold mean RMSE: %.6f\n',k,mean(RMSE_l))
+
 
 
 %% Gaussian RBF kernel:

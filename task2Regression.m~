@@ -11,7 +11,7 @@ if has_NaN
     fprintf("Wine quality dataset has missing value.\n\n");
 end
 
-C = linspace(0.5,1,5);
+C = linspace(0.5,2,5);
 sigma = linspace(1,5,5);
 q = linspace(1,3,3);
 epsilon = linspace(0.1,1,5);
@@ -44,11 +44,11 @@ for i = 1:k1
     fprintf('C: %.3f, ', best_C_l(i))
     fprintf('Epsilon: %.3f, ', best_Epsilon_l(i))
     fprintf('sv_num: %d(%.1f%%), ', support_vec_num_l(i), support_vec_percentage_l(i))
-    fprintf('OuterTestRMSE: %.4f, ', inRMSE_l(i))
-    fprintf('InnerBestRMSE: %.4f\n', outRMSE_l(i))
+    fprintf('OuterTestRMSE: %.4f, ', inRMSE_r(i))
+    fprintf('InnerBestRMSE: %.4f\n', outRMSE_r(i))
 end
-fprintf('\nAverage test RMSE: %.6f\n', mean(outRMSE_l))
-fprintf('Average support vector: %.1f(%.1f%%)\n\n', mean(support_vec_num_l), mean(support_vec_percentage_l))
+fprintf('\nAverage test RMSE: %.6f\n', mean(outRMSE_r))
+fprintf('Average support vector: %.1f(%.1f%%)\n\n', mean(support_vec_num_r), mean(support_vec_percentage_r))
 
 %% RBF kernal report the result
 fprintf('=========== RBF kernal ============\n\n')
