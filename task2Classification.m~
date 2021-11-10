@@ -50,54 +50,31 @@ fprintf('\nAverage test accuracy:%.6f\n',mean(correspond_outacc))
 fprintf('Average support vector:%.1f(%.1f%%)\n\n',mean(support_vec_num),mean(support_vec_percentage))
 
 %% Task3:
-fprintf('\n task3\n')
+print('\n task3\n')
 % Use the optimise hyperparameters to apply 10-fold cv
 k = 10;
 %% RBF kernel:
-fprintf('=========== RBF kernal ============\n')
+print('=========== RBF kernal ============\n')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
     [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));
     % Use 10 optimse hyperparameters train model
-    X_pdt = zeros(size(testX,1),size(best_sigma,2));
+    X_pdt = zeros(size(trainX),size(best_C,2));
     % Train k1 models based on the k1 best hyperparameters
     for j = 1:size(best_C,2)
         BoxConstraint = best_C(j);
-        KernelScale = best_sigma(j);
-        Mdl = fitcsvm(trainX,trainY,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint,'KernelScale',KernelScale);
-        X_pdt(:,j) = predict(Mdl, testX);
+        KernelScale = best_q(j);
+        Mdl = fitcsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint,'KernelScale',KernelScale);
+        X_pdt(:,j) = predict(M, testX);
     end
     % take the average of k1 models with the best hyperparameter
     avg_predict = mean(X_pdt,2);
     % Calculate performance
     acc(i) = accuracy(avg_predict,testY);
-    fprintf('accuracy:%.3f\n',acc(i))
-end
-fprintf('%d-Fold mean accuracy:%.6f\n',k,mean(acc))
+    fprintf('accuracy:%.3f',acc(i))
 
-%% Poly kernel:
-fprintf('=========== Poly kernal ============\n')
-acc = [];
-for i=1:k
-    fprintf('Fold-%d:',i);
-    [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));
-    % Use 10 optimse hyperparameters train model
-    X_pdt = zeros(size(testX,1),size(best_C,2));
-    % Train k1 models based on the k1 best hyperparameters
-    for j = 1:size(best_C,2)
-        BoxConstraint = best_C(j);
-        PolynomialOrder = best_q(j);
-        Mdl = fitcsvm(trainX,trainY,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder);
-        X_pdt(:,j) = predict(Mdl, testX);
-    end
-    % take the average of k1 models with the best hyperparameter
-    avg_predict = mean(X_pdt,2);
-    % Calculate performance
-    acc(i) = accuracy(avg_predict,testY);
-    fprintf('accuracy:%.3f\n',acc(i))
 end
-fprintf('%d-Fold mean accuracy:%.6f\n',k,mean(acc))
 
 
 
