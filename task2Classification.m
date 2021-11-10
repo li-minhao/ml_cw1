@@ -9,7 +9,7 @@ idx = ~strcmp(Y,'Iris-setosa');
 X = X(idx,:);
 Y = strcmp(Y(idx,:),'Iris-versicolor');
 D = [X,Y];
-% Initialize the hyperparameter
+
 C = linspace(0.5,2,10);
 sigma = linspace(1,5,5);
 q = linspace(1,5,5);
@@ -20,6 +20,8 @@ k2 = 5;
 % Training
 [best_C, best_sigma, correspond_inacc, correspond_outacc, support_vec_num, support_vec_percentage] = RBFClassificationCV(D, k1, k2, C, sigma);
 fprintf('=========== RBF kernal ============\n')
+% save the best hyperparameters found in a file
+save('RBFClassification.mat','best_C','best_sigma')
 % report the result
 fprintf('Best %d models:\n',k1)
 for i = 1:k1
@@ -36,6 +38,8 @@ fprintf('Average support vector:%.1f(%.1f%%)\n\n',mean(support_vec_num),mean(sup
 %% Polynomial kernal
 % Training
 [best_C, best_q, correspond_inacc, correspond_outacc, support_vec_num, support_vec_percentage] = PolyClassificationCV(D, 10, 5, C, q);
+% save the best hyperparameters found in a file
+save('PolyClassification.mat','best_C','best_q')
 % Report the result
 fprintf('=========== Poly kernal ============\n')
 fprintf('\nBest %d models:\n',k1)

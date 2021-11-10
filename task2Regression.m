@@ -1,7 +1,7 @@
 %% Regression task for task 2
 %% Data preparation
 wine = table2array(readtable('winequality-white.csv'));
-indices = randperm(size(wine,1),round(size(wine,1)/50));
+indices = randperm(size(wine,1),round(size(wine,1)/20));
 wine = wine(indices,:);
 X = wine(:,1:end-1);
 y = wine(:,end);
@@ -14,7 +14,7 @@ wine = [X,y];
 
 C = linspace(0.5,2,5);
 sigma = linspace(1,5,5);
-q = linspace(1,5,5);
+q = linspace(1,3,3);
 epsilon = linspace(0.1,1,5);
 k1 = 10;
 k2 = 5;
@@ -23,11 +23,15 @@ k2 = 5;
 %% RBF kernal training
 fprintf('Regression model using RBF kernels in training...\n\n')
 [best_C_r, best_sigma_r, best_Epsilon_r, inRMSE_r, outRMSE_r, support_vec_num_r, support_vec_percentage_r] = RBFRegressionCV(wine, k1, k2, C, sigma, epsilon);
+% save the best hyperparameters found in a file
+save('RBFRegression.mat','best_C_r','best_sigma_r','best_Epsilon_r')
 
 
 %% Polynomial kernal Training
 fprintf('Regression model using Polynomial kernels in training...\n\n')
 [best_C_p, best_q_p, best_Epsilon_p, inRMSE_p, outRMSE_p, support_vec_num_p, support_vec_percentage_p] = PolyRegressionCV(wine, k1, k2, C, q, epsilon);
+% save the best hyperparameters found in a file
+save('PolyRegression.mat','best_C_p','best_q_p','best_Epsilon_p')
 
 
 %% RBF kernal report the result
