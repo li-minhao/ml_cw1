@@ -1,4 +1,4 @@
-function [avg_acc, avg_pre, avg_re] = classificationTrainTest(X, Y, k)
+function [avg_acc, avg_pre, avg_re] = task1_classification(X, Y, k)
     acc = zeros(1,k);
     pre = zeros(1,k);
     re  = zeros(1,k);

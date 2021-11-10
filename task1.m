@@ -25,7 +25,7 @@ end
  
 
 %% train classification model and test
-[acc, pre, re] = classificationTrainTest(X, Y, 10);
+[acc, pre, re] = task1_classification(X, Y, 10);
 f1 = 2*(pre*re)/(pre+re);
 fprintf("The accuracy of iris is: ");
 disp(acc);
@@ -60,7 +60,7 @@ end
 epsilon =  linspace(0.1,1.5,20);
 RMSE = zeros(1, 20);
 for i=1:20
-    RMSE(i) = regressionTrainTest(X_wine, Y_wine, k, epsilon(i));
+    RMSE(i) = task1_regression(X_wine, Y_wine, k, epsilon(i));
 end
 
 plot(epsilon,RMSE);
