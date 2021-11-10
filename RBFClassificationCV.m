@@ -67,9 +67,9 @@ function [best_C, best_sigma, correspond_inacc, correspond_outacc, support_vec_n
         clf_acc = accuracy(X_pdt,OuttestY);
         correspond_outacc = [correspond_outacc,clf_acc];
         sv_num = sum(svInd);
-        sv_per = sv_num/length(X_train)*100;
+        sv_per = sv_num/length(OuttrainX)*100;
         support_vec_num = [support_vec_num, sv_num];
         support_vec_percentage = [support_vec_percentage, sv_per];
-        fprintf('\nouterCV:outerFold:%d, C:%.3f, sigma:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, testAcc:%.3f\n\n',i,C_best,sigma_best,sum(svInd),sum(svInd)/length(X_train)*100,best_acc,clf_acc)
+        fprintf('\nouterCV:outerFold:%d, C:%.3f, sigma:%.3f\nsvNum:%d(%.3f%%), estAcc:%.3f, testAcc:%.3f\n\n',i,C_best,sigma_best,sum(svInd),sum(svInd)/length(OuttrainX)*100,best_acc,clf_acc)
     end
 end

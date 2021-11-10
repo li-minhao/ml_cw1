@@ -69,7 +69,7 @@ function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, suppor
         clf_RMSE = rmse(X_pdt,OuttestY);
         outRMSE = [outRMSE,clf_RMSE];
         support_vec_num(end+1) = sum(svIdx);
-        support_vec_percentage(end+1) = sum(svIdx)/length(X_train)*100;
-        fprintf('\nouterCV: outerFold:%d, C:%.3f, q:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,q_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
+        support_vec_percentage(end+1) = sum(svIdx)/length(OuttrainX)*100;
+        fprintf('\nouterCV: outerFold:%d, C:%.3f, q:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,q_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(OuttrainX)*100,best_RMSE,clf_RMSE)
     end
 end
