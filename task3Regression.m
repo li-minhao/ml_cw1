@@ -2,11 +2,10 @@
 % Use the optimise hyperparameters to apply 10-fold cv
 %% Data preparation
 wine = table2array(readtable('winequality-white.csv'));
-indices = randperm(size(wine,1),round(size(wine,1)/20));
-wine = wine(indices,:);
+load('WineIndices.mat');
+wine = wine(index,:);
 X = wine(:,1:end-1);
 y = wine(:,end);
-
 [X,has_NaN] = preprocess(X,y);
 if has_NaN
     fprintf("Wine quality dataset has missing value.\n\n");
@@ -21,7 +20,7 @@ for i=1:k
     fprintf('Fold %d: ',i);
     [trainX,trainY,testX,testY] = KFoldGroup(X,y,k,i,randperm(size(X,1)));
     Mdl = fitrsvm(trainX, trainY,'Standardize',true);
-    X_pdt = predict(Mdl, testX);
+    x_pdt = predict(Mdl, testX);
     RMSE_l(i) = rmse(x_pdt,testY);
     fprintf('RMSE: %.3f\n',RMSE_l(i))
 end
@@ -42,7 +41,7 @@ for i=1:k
         BoxConstraint_r = best_C_r(j);
         KernelScale_r = best_sigma_r(j);
         Epsilon_r = best_Epsilon_r(j);
-        Mdl = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint_r,'KernelScale',KernelScale_r,'Epsilon',Epsilon_r);
+        Mdl = fitrsvm(trainX,trainY,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint_r,'KernelScale',KernelScale_r,'Epsilon',Epsilon_r);
         X_pdt(:,j) = predict(Mdl, testX);
     end
     % take the average of k1 models with the best hyperparameter
@@ -68,7 +67,7 @@ for i=1:k
         BoxConstraint_p = best_C_p(j);
         PolynomialOrder_p = best_q_p(j);
         Epsilon_p = best_Epsilon_p(j);
-        Mdl = fitrsvm(X_train,y_train,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint_p,'PolynomialOrder',PolynomialOrder_p,'Epsilon',Epsilon_p);
+        Mdl = fitrsvm(trainX,trainY,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint_p,'PolynomialOrder',PolynomialOrder_p,'Epsilon',Epsilon_p);
         X_pdt(:,j) = predict(Mdl, testX);
     end
     % take the average of k1 models with the best hyperparameter

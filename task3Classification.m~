@@ -22,7 +22,7 @@ for i=1:k
     % Use 10 optimse hyperparameters train model
     X_pdt = zeros(size(testX,1),size(best_sigma_rbf,2));
     % Train k1 models based on the k1 best hyperparameters
-    for j = 1:size(best_C_rbf,2)
+    for j = 1:size(best_C,2)
         BoxConstraint = best_C_rbf(j);
         KernelScale = best_sigma_rbf(j);
         Mdl = fitcsvm(trainX,trainY,'Standardize',true,'KernelFunction','RBF','BoxConstraint',BoxConstraint,'KernelScale',KernelScale);
@@ -44,11 +44,11 @@ for i=1:k
     fprintf('Fold-%d:',i);
     [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));
     % Use 10 optimse hyperparameters train model
-    X_pdt = zeros(size(testX,1),size(best_C_poly,2));
+    X_pdt = zeros(size(testX,1),size(best_C,2));
     % Train k1 models based on the k1 best hyperparameters
-    for j = 1:size(best_C_poly,2)
-        BoxConstraint = best_C_poly(j);
-        PolynomialOrder = best_q_poly(j);
+    for j = 1:size(best_C,2)
+        BoxConstraint = best_C(j);
+        PolynomialOrder = best_q(j);
         Mdl = fitcsvm(trainX,trainY,'Standardize',true,'KernelFunction','polynomial','BoxConstraint',BoxConstraint,'PolynomialOrder',PolynomialOrder);
         X_pdt(:,j) = predict(Mdl, testX);
     end
