@@ -1,7 +1,7 @@
-function [avg_acc, avg_pre, avg_re] = classificationTrainTest(X, Y, k)
-    acc = [];
-    pre = [];
-    re  = [];
+function [avg_acc, avg_pre, avg_re] = task1_classification(X, Y, k)
+    acc = zeros(1,k);
+    pre = zeros(1,k);
+    re  = zeros(1,k);
     for i=1:k
         [trainX,trainY,testX,testY] = KFoldGroup(X,Y,k,i,randperm(size(X,1)));
 
@@ -10,9 +10,9 @@ function [avg_acc, avg_pre, avg_re] = classificationTrainTest(X, Y, k)
 
         % predict the label for test set
         predictLabels = predict(Mdl,testX);
-        acc = [acc,accuracy(predictLabels,testY)];
-        pre = [pre,precision(predictLabels,testY)];
-        re  = [re,recall(predictLabels,testY)];
+        acc(i) = accuracy(predictLabels,testY);
+        pre(i) = precision(predictLabels,testY);
+        re(i)  = recall(predictLabels,testY);
     end
     avg_acc = mean(acc);
     avg_pre = mean(pre);

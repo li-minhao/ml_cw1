@@ -1,4 +1,4 @@
-function PolyRegressionCV(D, k1, k2, C, q, epsilon)
+function [best_C, best_q, best_Epsilon, inRMSE, outRMSE, support_vec_num, support_vec_percentage] = PolyRegressionCV(D, k1, k2, C, q, epsilon)
 % input dataset D, outer k1 fold, inner k2 fold, C, q, and Epsilon
 % report the best hyperparameter chosen and its correspond RMSE
 
@@ -27,12 +27,12 @@ function PolyRegressionCV(D, k1, k2, C, q, epsilon)
         fprintf('Fold %d:\n',i)
         % Searching the hyperparameter C
         for m = 1:length(C)
+            BoxConstraint = C(m);
             % Searching the hyperparameter q
             for n = 1:length(q)
+                PolynomialOrder = q(n);
                 % Searching the hyperparameter Epsilon
                 for p = 1:length(epsilon)
-                    BoxConstraint = C(m);
-                    PolynomialOrder = q(n);
                     Epsilon = epsilon(p);
                     for j = 1:k2
                     % The inner cross validation
@@ -89,21 +89,6 @@ function PolyRegressionCV(D, k1, k2, C, q, epsilon)
         outRMSE = [outRMSE,clf_RMSE];
         support_vec_num(end+1) = sum(svIdx);
         support_vec_percentage(end+1) = sum(svIdx)/length(X_train)*100;
-        fprintf('outerCV: outerFold:%d, C:%.3f, q:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,q_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
+        fprintf('\nouterCV: outerFold:%d, C:%.3f, q:%.3f Epsilon:%.3f svNum:%d(%.3f%%), estRMSE:%.3f, testRMSE:%.3f\n\n',i,C_best,q_best,Epsilon_best,sum(svIdx),sum(svIdx)/length(X_train)*100,best_RMSE,clf_RMSE)
     end
-    % report the result
-    fprintf('best_C\n')
-    disp(best_C)
-    fprintf('best_q\n')
-    disp(best_q)
-    fprintf('best_Epsilon\n');
-    disp(best_Epsilon);
-    fprintf('correspond_inRMSE\n');
-    disp(inRMSE);
-    fprintf('correspond_outRMSE\n');
-    disp(outRMSE);
-    fprintf('support_vec_num\n')
-    disp(support_vec_num)
-    fprintf('support_vec_percentage\n')
-    disp(support_vec_percentage)
 end

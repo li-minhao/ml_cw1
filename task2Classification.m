@@ -1,4 +1,4 @@
-%% Task 2
+%% Classification task for Task 2
 %% Data preparation
 iris = readtable('iris.csv');
 X = iris(:,1:4);
@@ -17,6 +17,7 @@ k1 = 10;
 k2 = 5;
 
 %% RBF kernal
+% Training
 [best_C, best_sigma, correspond_inacc, correspond_outacc, support_vec_num, support_vec_percentage] = RBFClassificationCV(D, k1, k2, C, sigma);
 fprintf('=========== RBF kernal ============\n')
 % report the result
@@ -25,7 +26,7 @@ for i = 1:k1
     fprintf('C: %.3f, ',best_C(i))
     fprintf('Sigma:%.2f, ',best_sigma(i))
     fprintf('sv_num:%d(%.1f%%), ',support_vec_num(i),support_vec_percentage(i))
-    fprintf('OutTestAcc:%.4f, ',correspond_outacc(i))
+    fprintf('OuterTestAcc:%.4f, ',correspond_outacc(i))
     fprintf('InnerBestAcc:%.4f\n',correspond_inacc(i))
 end
 fprintf('\nAverage test accuracy:%.6f\n',mean(correspond_outacc))
@@ -42,7 +43,7 @@ for i = 1:k1
     fprintf('C: %.3f, ',best_C(i))
     fprintf('q:%.2f, ',best_q(i))
     fprintf('sv_num:%d(%.1f%%), ',support_vec_num(i),support_vec_percentage(i))
-    fprintf('OutTestAcc:%.4f, ',correspond_outacc(i))
+    fprintf('OuterTestAcc:%.4f, ',correspond_outacc(i))
     fprintf('InnerBestAcc:%.4f\n',correspond_inacc(i))
 end
 fprintf('\nAverage test accuracy:%.6f\n',mean(correspond_outacc))
