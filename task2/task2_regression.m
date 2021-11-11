@@ -1,7 +1,7 @@
 %% Regression task for task 2
 close all;
 clear;
-addpath(genpath("./dataset"));
+addpath(genpath(".."));
 path_name = 'hyperparameter/';
 
 
