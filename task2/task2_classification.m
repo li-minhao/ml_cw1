@@ -27,7 +27,7 @@ k2 = 5;
 %% Linear kernel
 % Training
 fprintf('Classification model linear using RBF kernels in training...\n\n')
-[best_C_l, correspond_inacc_l, correspond_outacc_l, support_vec_num_l, support_vec_percentage_l] = LinearClassificationCV(X,Y, k1, k2, C);
+[best_C_l, correspond_inacc_l, correspond_outacc_l, support_vec_num_l, support_vec_percentage_l] = classification_linear_cv(X,Y, k1, k2, C);
 
 % save the best hyperparameters found in a file
 save([path_name,'linear_classification.mat'],'best_C_l')
@@ -36,15 +36,15 @@ save([path_name,'linear_classification.mat'],'best_C_l')
 %% RBF kernel
 % Training
 fprintf('Classification model using RBF kernels in training...\n\n')
-[best_C_rbf, best_sigma_rbf, correspond_inacc_r, correspond_outacc_r, support_vec_num_r, support_vec_percentage_r] = RBFClassificationCV(X,Y, k1, k2, C, sigma);
+[best_C_rbf, best_sigma_rbf, correspond_inacc_r, correspond_outacc_r, support_vec_num_r, support_vec_percentage_r] = classification_RBF_cv(X,Y, k1, k2, C, sigma);
 % save the best hyperparameters found in a file
 save([path_name,'RBF_classification.mat'],'best_C_rbf','best_sigma_rbf')
 
 
-%% Polynomial kernal
+%% Polynomial kernel
 % Training
 fprintf('Classification model using Polynomial kernels in training...\n\n')
-[best_C_poly, best_q_poly, correspond_inacc_p, correspond_outacc_p, support_vec_num_p, support_vec_percentage_p] = PolyClassificationCV(X, Y, 10, 5, C, q);
+[best_C_poly, best_q_poly, correspond_inacc_p, correspond_outacc_p, support_vec_num_p, support_vec_percentage_p] = classification_poly_cv(X, Y, 10, 5, C, q);
 % save the best hyperparameters found in a file
 save([path_name,'poly_classification.mat'],'best_C_poly','best_q_poly')
 

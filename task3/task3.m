@@ -18,7 +18,7 @@ Y_iris = Y_iris(51:150,:);
 
 % load wine_quality
 wine = table2array(readtable('winequality-white.csv'));
-load('WineIndices.mat');
+load('dataset/wine_indices.mat');
 wine = wine(index,:);
 X_wine = wine(:,1:end-1);
 Y_wine = wine(:,end);
@@ -30,7 +30,7 @@ end
 
 %% Linear kernel (Classification):
 fprintf('=========== Linear kernal (Classification) ============\n\n')
-load('LinearClassification.mat')
+load('hyper_parameter/linear_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -54,7 +54,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% RBF kernel (Classification):
 fprintf('=========== RBF kernal (Classification) ============\n\n')
-load('RBFClassification.mat')
+load('hyper_parameter/RBF_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -79,7 +79,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% Poly kernel (Classification):
 fprintf('=========== Poly kernal (Classification) ============\n\n')
-load('PolyClassification.mat')
+load('hyper_parameter/poly_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -104,7 +104,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% Linear kernel (Regression):
 fprintf('=========== Linear kernal (Regression) ============\n\n')
-load('LinearSVR.mat')
+load('hyper_parameter/linear_SVR.mat')
 RMSE_l = [];
 for i=1:k
     fprintf('Fold %d: ',i);
@@ -129,7 +129,7 @@ fprintf('\n%d-Fold mean RMSE: %.6f\n\n',k,mean(RMSE_l))
 
 %% Gaussian RBF kernel (Regression):
 fprintf('=========== RBF kernal (Regression) ============\n\n')
-load('RBFRegression.mat')
+load('hyper_parameter/RBF_regression.mat')
 RMSE_r = [];
 for i=1:k
     fprintf('Fold %d: ',i);
@@ -155,7 +155,7 @@ fprintf('\n%d-Fold mean RMSE: %.6f\n',k,mean(RMSE_r))
 
 %% Polynomial kernel (Regression):
 fprintf('=========== Poly kernal (Regression) ============\n\n')
-load('PolyRegression.mat')
+load('hyper_parameter/poly_regression.mat')
 RMSE_p = [];
 for i=1:k
     fprintf('Fold %d: ',i);

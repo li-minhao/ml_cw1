@@ -39,11 +39,11 @@ wine = readtable("winequality-white.csv");
 % len = size(wine,1);
 % index = randperm(len,round(len/20));
 % if 0    % Please do not modify this file when testing
-%     save('WineIndices.mat', 'index')
+%     save('dataset/wine_indices.mat', 'index')
 % end
 
 % make sure use the same dataset for both task1 and task2
-load('WineIndices.mat');
+load('dataset/wine_indices.mat');
 wine = wine(index,:);
 
 X_wine = table2array(wine(:,1:11));
