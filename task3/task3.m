@@ -30,7 +30,7 @@ end
 
 %% Linear kernel (Classification):
 fprintf('=========== Linear kernal (Classification) ============\n\n')
-load('hyper_parameter/linear_classification.mat')
+load('hyperparameter/linear_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -54,7 +54,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% RBF kernel (Classification):
 fprintf('=========== RBF kernal (Classification) ============\n\n')
-load('hyper_parameter/RBF_classification.mat')
+load('hyperparameter/RBF_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -79,7 +79,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% Poly kernel (Classification):
 fprintf('=========== Poly kernal (Classification) ============\n\n')
-load('hyper_parameter/poly_classification.mat')
+load('hyperparameter/poly_classification.mat')
 acc = [];
 for i=1:k
     fprintf('Fold-%d:',i);
@@ -104,7 +104,7 @@ fprintf('\n%d-Fold mean accuracy:%.6f\n\n',k,mean(acc))
 
 %% Linear kernel (Regression):
 fprintf('=========== Linear kernal (Regression) ============\n\n')
-load('hyper_parameter/linear_SVR.mat')
+load('hyperparameter/linear_SVR.mat')
 RMSE_l = [];
 for i=1:k
     fprintf('Fold %d: ',i);
@@ -129,7 +129,7 @@ fprintf('\n%d-Fold mean RMSE: %.6f\n\n',k,mean(RMSE_l))
 
 %% Gaussian RBF kernel (Regression):
 fprintf('=========== RBF kernal (Regression) ============\n\n')
-load('hyper_parameter/RBF_regression.mat')
+load('hyperparameter/RBF_regression.mat')
 RMSE_r = [];
 for i=1:k
     fprintf('Fold %d: ',i);
@@ -155,7 +155,7 @@ fprintf('\n%d-Fold mean RMSE: %.6f\n',k,mean(RMSE_r))
 
 %% Polynomial kernel (Regression):
 fprintf('=========== Poly kernal (Regression) ============\n\n')
-load('hyper_parameter/poly_regression.mat')
+load('hyperparameter/poly_regression.mat')
 RMSE_p = [];
 for i=1:k
     fprintf('Fold %d: ',i);

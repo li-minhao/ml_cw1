@@ -2,7 +2,7 @@
 close all;
 clear;
 addpath(genpath("./dataset"));
-path_name = 'hyper_parameter/';
+path_name = 'hyperparameter/';
 
 
 %% Data preparation
